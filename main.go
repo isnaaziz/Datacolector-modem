@@ -15,20 +15,21 @@ import (
 	"time"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
-	_ "github.com/lib/pq"
+	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"  // PostgreSQL driver
 )
 
 var (
-	mqttBroker    = os.Getenv("MQTT_BROKER")
-	mqttUser      = os.Getenv("MQTT_USER")
-	mqttPassword  = os.Getenv("MQTT_PASSWORD")
-	mqttSubscribe = os.Getenv("MQTT_SUBSCRIBE")
-	dbHost        = os.Getenv("DB_HOST")
-	dbPort        = os.Getenv("DB_PORT")
-	dbName        = os.Getenv("DB_NAME")
-	dbUser        = os.Getenv("DB_USER")
-	dbPassword    = os.Getenv("DB_PASSWORD")
-	apiKey        = os.Getenv("API_KEY")
+	mqttBroker    string
+	mqttUser      string
+	mqttPassword  string
+	mqttSubscribe string
+	dbHost        string
+	dbPort        string
+	dbName        string
+	dbUser        string
+	dbPassword    string
+	apiKey        string
 )
 
 type EventMessage struct {
@@ -43,11 +44,15 @@ type EventMessage struct {
 
 var eventState sync.Map // A map to track the state of events for each sender
 
+
+
 func getCurrentTimeMillis() int64 {
 	return time.Now().UnixNano() / int64(time.Millisecond)
 }
 
 func setupDatabase() (*sql.DB, error) {
+
+
 	postgresDSN := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		dbHost, dbPort, dbUser, dbPassword, dbName)
 
@@ -955,6 +960,27 @@ func sendDataPoint(message EventMessage) {
 var mqttClient mqtt.Client
 
 func main() {
+
+
+	// Load environment variables from .env file
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
+	}
+
+	// Initialize global variables from environment variables
+	mqttBroker = os.Getenv("MQTT_BROKER")
+	mqttUser = os.Getenv("MQTT_USER")
+	mqttPassword = os.Getenv("MQTT_PASSWORD")
+	mqttSubscribe = os.Getenv("MQTT_SUBSCRIBE")
+	dbHost = os.Getenv("DB_HOST")
+	dbPort = os.Getenv("DB_PORT")
+	dbName = os.Getenv("DB_NAME")
+	dbUser = os.Getenv("DB_USER")
+	dbPassword = os.Getenv("DB_PASSWORD")
+	apiKey = os.Getenv("API_KEY")
+
+	// Setup database connection
 	db, err := setupDatabase()
 	if err != nil {
 		log.Fatalf("Failed to set up database: %v", err)

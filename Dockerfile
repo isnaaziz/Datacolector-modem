@@ -1,5 +1,5 @@
 # Gunakan image golang sebagai base image
-FROM golang:1.20-alpine
+FROM golang:1.19
 
 # Atur direktori kerja dalam container
 WORKDIR /modem_go
@@ -17,4 +17,4 @@ COPY . .
 RUN go build -o /modem_go/main .
 
 # Eksekusi aplikasi
-CMD ["/app/main"]
+CMD ["/modem_go/main"]

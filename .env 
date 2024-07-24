@@ -1,0 +1,15 @@
+# MQTT Configuration
+MQTT_BROKER=tcp://192.3.128.100:1883
+MQTT_USER=aziz
+MQTT_PASSWORD=@Dmin123456
+MQTT_SUBSCRIBE=DATA/MODEM/#
+
+# Database Configuration
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=azizz
+DB_USER=azizz
+DB_PASSWORD=asd11223
+
+# API Key
+API_KEY=AIzaSyDjbjKC5knaNkeqilCuJKOW3M-P9pFvyZ4
